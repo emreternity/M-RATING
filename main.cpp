@@ -75,6 +75,16 @@ void mRatingMatch(vector<Player>& parr, vector<int>& rarr, int size) {
 	}
 }
 
+void premadeFinalist(vector<Player>& parr, vector<int>& rarr, int size) {
+	int a = pRatings.size();
+	for (int j = 0; j < size; j++) {
+		if (parr[j].getRating() == rarr[a-1]) {
+			cout<<(parr[j].getName() + " - " + to_string(rarr[a-1]))<<endl<<endl;
+			continue;
+		}
+	}
+}
+
 void getPlayerList() {
 	for (int i = 0;i < Players.size();i++) {
 		cout << "Oyuncu "<< i+1 << " | " << Players[i].getName() << " - " << Players[i].getRating() << endl;
@@ -171,11 +181,31 @@ void menu() {
 	else if (choice == 5) {
 		system("cls");
 		setRatingsList();
+		bubbleSort(pRatings, pRatings.size());
 		if (pRatings.size() % 2 == 1) {
-			cout << "Oyuncu sayisi eslestirme icin cift sayi olmalidir." << endl;
-			system("pause");
-			system("cls");
-			menu();
+			cout << "Oyuncu sayisi tek sayi oldugundan en yuksek reytingli oyuncu finale yukseltildi." << endl<<endl;
+			cout << "Belirlenen Finalist: ";
+			premadeFinalist(Players, pRatings, Players.size());
+
+			pRatings.pop_back();
+			srand(time(NULL));
+			for (int i = 0; i <= pRatings.size();i++) {
+				int mRes = mWayTest();
+				cout << "Eslesme " << i + 1 << endl;
+				for (int j = 0; j < Players.size(); j++) {
+					if (Players[j].getRating() == mRes) {
+						cout << Players[j].getName() << " - " << Players[j].getRating() << endl;
+					}
+					else if (Players[j].getRating() == pRatings[0]) {
+						cout << Players[j].getName() << " - " << Players[j].getRating() << endl;
+					}
+				}
+				cout << endl;
+				pRatings.erase(pRatings.begin());
+				pRatings.erase(remove(pRatings.begin(), pRatings.end(), mRes), pRatings.end());
+			}
+
+
 		}
 		else {
 			srand(time(NULL));
@@ -213,9 +243,10 @@ int main() {
 	Player t1("Emre", "Dolas", 2000);
 	Player t2("Gizem", "Temelcan", 3000);
 	Player t3("Beyza", "Baki", 2850);
-	Player t4("Dedi", "Dido", 2900);
-	Player t5("Emo", "Delo", 1999);
-	Player t6("Emolingo", "Deloli", 3400);
+	Player t4("Melodi", "Vezir", 2900);
+	Player t5("Busra", "Sah", 1999);
+	Player t6("Metin", "Piyon", 3400);
+	Player t7("Marcus", "Carlsen", 3800);
 
 	Players.push_back(t1);
 	Players.push_back(t2);
@@ -223,6 +254,7 @@ int main() {
 	Players.push_back(t4);
 	Players.push_back(t5);
 	Players.push_back(t6);
+	Players.push_back(t7);
 	menu();
 
 
