@@ -92,17 +92,34 @@ void removePlayer() {
 
 int mWayTest() {
 	int diff = 10000;
+	int diffV = 10000;
 	int chosenOne = 0;
 	int size = pRatings.size();
-	random_shuffle(pRatings.begin(), pRatings.end());
-	for (int j = 0; j < size; j++) {
-		int ref = abs(pRatings[0] - pRatings[j]);
-		if (ref != 0 && diff > ref) {
-			diff = ref;
-			chosenOne = pRatings[j];
+	int a = 0;
+	while (a == 0) {
+		random_shuffle(pRatings.begin(), pRatings.end());
+		for (int j = 0; j < size; j++) {
+			int ref = abs(pRatings[0] - pRatings[j]);
+			if (ref != 0 && diff > ref) {
+				diff = ref;
+				chosenOne = pRatings[j];
+			}
+		}
+
+		for (int y = 0; y < size; y++) {
+			int refV = abs(chosenOne - pRatings[y]);
+			if (refV != 0 && diffV > refV) {
+				diffV = refV;
+			}
+		}
+
+		if (diff == diffV) {
+			return chosenOne;
+			a++;
 		}
 	}
-	return chosenOne;
+
+	
 }
 
 void menu() {
@@ -160,21 +177,23 @@ void menu() {
 			system("cls");
 			menu();
 		}
-		srand(time(NULL));
-		for (int i = 0; i <= pRatings.size();i++) {
-				int mRes = mWayTest();
-				cout << "Eslesme " << i+1 << endl;
-				for (int j = 0; j < Players.size(); j++) {
-					if (Players[j].getRating() == mRes) {
-						cout << Players[j].getName() << " - " << Players[j].getRating() << endl;
+		else {
+			srand(time(NULL));
+			for (int i = 0; i <= pRatings.size();i++) {
+					int mRes = mWayTest();
+					cout << "Eslesme " << i+1 << endl;
+					for (int j = 0; j < Players.size(); j++) {
+						if (Players[j].getRating() == mRes) {
+							cout << Players[j].getName() << " - " << Players[j].getRating() << endl;
+						}
+						else if (Players[j].getRating() == pRatings[0]) {
+							cout << Players[j].getName() << " - " << Players[j].getRating() << endl;
+						}
 					}
-					else if (Players[j].getRating() == pRatings[0]) {
-						cout << Players[j].getName() << " - " << Players[j].getRating() << endl;
-					}
-				}
-				cout << endl;
-				pRatings.erase(pRatings.begin());
-				pRatings.erase(remove(pRatings.begin(), pRatings.end(), mRes), pRatings.end());
+					cout << endl;
+					pRatings.erase(pRatings.begin());
+					pRatings.erase(remove(pRatings.begin(), pRatings.end(), mRes), pRatings.end());
+			}
 		}
 		//if (pRatings.size() % 2 == 1) {
 		//	determineSubstitute();
